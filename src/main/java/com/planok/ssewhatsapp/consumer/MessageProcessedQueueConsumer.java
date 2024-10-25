@@ -3,6 +3,7 @@ package com.planok.ssewhatsapp.consumer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.planok.ssewhatsapp.configuration.RabbitMQConfiguration;
+import com.planok.ssewhatsapp.configuration.RabbitMQConfigurationComponent;
 import com.planok.ssewhatsapp.event.MessageEvent;
 import com.planok.ssewhatsapp.exception.SerializerHandlerException;
 import com.planok.ssewhatsapp.service.SseEmitterService;
@@ -43,7 +44,7 @@ public final class MessageProcessedQueueConsumer implements ConsumerInterface {
             @Header(AmqpHeaders.DELIVERY_TAG) long tag,
             @Header(name = "x-retry-count", required = false) Integer retryCount
     ) {
-        log.info("Consuming message from queue: {}", RabbitMQConfiguration.primaryQueueName);
+        log.info("Consuming message from queue: {}", RabbitMQConfigurationComponent.getPrimaryQueueName());
         try {
             MessageProperties messageProperties = message.getMessageProperties();
             if (!"application/json".equals(messageProperties.getContentType())) {
@@ -72,7 +73,7 @@ public final class MessageProcessedQueueConsumer implements ConsumerInterface {
     private void handleNackWithRetry(Channel channel, long tag, Integer retryCount, Exception originalException) {
         retryCount = (retryCount == null) ? 0 : retryCount;
         retryCount++;
-        if (retryCount > RabbitMQConfiguration.maxRetryAttempts) {
+        if (retryCount > RabbitMQConfigurationComponent.getMaxRetryAttempts()) {
             log.error(MAX_RETRIES_REACHED);
             sendToDeadLetterQueue(channel, tag);
         } else {

@@ -2,6 +2,7 @@ package com.planok.ssewhatsapp.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import lombok.Getter;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.config.RetryInterceptorBuilder;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
@@ -19,8 +20,9 @@ import org.springframework.retry.interceptor.RetryOperationsInterceptor;
 @Configuration
 public class RabbitMQConfiguration {
 
+    @Getter
     @Value("${app.rabbitmq.queue.name}")
-    public static String primaryQueueName;
+    public String primaryQueueName;
 
     @Value("${app.rabbitmq.queue.fall_back.name}")
     public String fallBackQueueName;
@@ -31,8 +33,9 @@ public class RabbitMQConfiguration {
     @Value("${app.rabbitmq.routing_key.fall_back.name}")
     public String routingKeyFallBackName;
 
+    @Getter
     @Value("${app.rabbitmq.interceptor.max_attempts:5}")
-    public static int maxRetryAttempts;
+    public int maxRetryAttempts;
 
     @Value("${app.rabbitmq.interceptor.initial_interval:2000}")
     public int initialInterval;
