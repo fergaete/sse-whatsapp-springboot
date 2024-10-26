@@ -12,17 +12,4 @@ public class SsewhatsappApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SsewhatsappApplication.class, args);
 	}
-
-	@Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry corsRegistry) {
-                corsRegistry
-                        .addMapping("/**")
-                        .allowedOrigins("*")
-                        .allowedMethods("GET", "POST","PUT", "DELETE");
-            }
-        };
-    }
 }
